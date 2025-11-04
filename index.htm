@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Мой HTM Банк</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input, button {
+            padding: 8px;
+            margin: 5px 0;
+            width: 100%;
+        }
+        .balance {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Мой HTM Банк</h1>
+        
+        <div>
+            <div class="balance">
+                Баланс: <span id="balance">0</span> руб.
+            </div>
+            
+            <h3>Пополнить счет:</h3>
+            <input type="number" id="depositAmount" placeholder="Сумма">
+            <button onclick="deposit()">Пополнить</button>
+
+            <h3>Перевод средств:</h3>
+            <input type="number" id="transferAmount" placeholder="Сумма">
+            <input type="text" id="recipient" placeholder="Получатель">
+            <button onclick="transfer()">Перевести</button>
+
+            <h3>История операций:</h3>
+            <ul id="history"></ul>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация данных
+        if(!localStorage.getItem('balance')) {
+            localStorage.setItem('balance', '0');
+            localStorage.setItem('history', JSON.stringify([]));
+        }
+
+        function updateDisplay() {
+            // Обновление баланса
+            document.getElementById('balance').textContent = 
+                localStorage.getItem('balance');
+            
+            // Обновление истории
+            const history = JSON.parse(localStorage.getItem('history'));
+            document.getElementById('history').innerHTML = history
+                .map(record => `<li>${record}</li>`)
+                .reverse()
+                .join('');
+        }
+
+        function deposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            if(amount <= 0) return alert('Введите корректную сумму');
+            
+            const currentBalance = parseFloat(localStorage.getItem('balance'));
+            const newBalance = currentBalance + amount;
+            
+            localStorage.setItem('balance', newBalance.toString());
+            
+            const history = JSON.parse(localStorage.getItem('history'));
+            history.push(`Пополнение: +${amount} руб.`);
+            localStorage.setItem('history', JSON.stringify(history));
+            
+            updateDisplay();
+            document.getElementById('depositAmount').value = '';
+        }
+
+        function transfer() {
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const recipient = document.getElementById('recipient').value;
+            const currentBalance = parseFloat(localStorage.getItem('balance'));
+            
+            if(amount <= 0) return alert('Введите корректную сумму');
+            if(!recipient) return alert('Введите получателя');
+            if(amount > currentBalance) return alert('Недостаточно средств');
+            
+            const newBalance = currentBalance - amount;
+            localStorage.setItem('balance', newBalance.toString());
+            
+            const history = JSON.parse(localStorage.getItem('history'));
+            history.push(`Перевод ${recipient}: -${amount} руб.`);
+            localStorage.setItem('history', JSON.stringify(history));
+            
+            updateDisplay();
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('recipient').value = '';
+        }
+
+        // Первоначальное обновление интерфейса
+        updateDisplay();
+    </script>
+</body>
+</html>
