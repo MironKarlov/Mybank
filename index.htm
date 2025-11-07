@@ -2,113 +2,501 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Мой HTM Банк</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СберБанк</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 20px auto;
+            background: linear-gradient(135deg, #1e8c3e 0%, #21a038 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .app {
+            max-width: 400px;
+            margin: 0 auto;
+            background: #f5f5f5;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Шапка */
+        .header {
+            background: #21a038;
+            color: white;
+            padding: 50px 20px 20px 20px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .balance-card {
+            background: white;
+            color: #333;
             padding: 20px;
+            border-radius: 16px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
-        .container {
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        input, button {
-            padding: 8px;
-            margin: 5px 0;
-            width: 100%;
-        }
-        .balance {
-            font-size: 1.5em;
+
+        .balance-amount {
+            font-size: 32px;
+            font-weight: 700;
             margin: 10px 0;
+        }
+
+        .balance-label {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* Быстрые действия */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            margin: 10px 20px;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .action-btn {
+            text-align: center;
+            padding: 10px 5px;
+        }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            background: #e8f5e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            color: #21a038;
+            font-weight: bold;
+        }
+
+        .action-text {
+            font-size: 12px;
+            color: #333;
+        }
+
+        /* История */
+        .history-section {
+            padding: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .transaction {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: white;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+
+        .transaction-icon {
+            width: 40px;
+            height: 40px;
+            background: #e8f5e8;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #21a038;
+        }
+
+        .transaction-info {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .transaction-date {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .transaction-amount {
+            font-weight: 600;
+            color: #21a038;
+        }
+
+        .transaction-amount.negative {
+            color: #ff4444;
+        }
+
+        /* Нижнее меню */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 400px;
+            background: white;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            border-top: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .nav-item {
+            text-align: center;
+            padding: 8px;
+            color: #999;
+            font-size: 10px;
+        }
+
+        .nav-item.active {
+            color: #21a038;
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: white;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #21a038;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Мой HTM Банк</h1>
-        
-        <div>
-            <div class="balance">
-                Баланс: <span id="balance">0</span> руб.
+    <div class="app">
+        <!-- Шапка -->
+        <div class="header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-weight: 600;">СберБанк</div>
+                <div>👤</div>
             </div>
-            
-            <h3>Пополнить счет:</h3>
-            <input type="number" id="depositAmount" placeholder="Сумма">
-            <button onclick="deposit()">Пополнить</button>
+            <div class="balance-card">
+                <div class="balance-label">Ваш баланс</div>
+                <div class="balance-amount" id="balance">0 ₽</div>
+                <div class="balance-label">Кэшбек: 0 ₽</div>
+            </div>
+        </div>
 
-            <h3>Перевод средств:</h3>
-            <input type="number" id="transferAmount" placeholder="Сумма">
-            <input type="text" id="recipient" placeholder="Получатель">
-            <button onclick="transfer()">Перевести</button>
+        <!-- Быстрые действия -->
+        <div class="quick-actions">
+            <div class="action-btn" onclick="openModal('depositModal')">
+                <div class="action-icon">+</div>
+                <div class="action-text">Пополнить</div>
+            </div>
+            <div class="action-btn" onclick="openModal('transferModal')">
+                <div class="action-icon">⇄</div>
+                <div class="action-text">Перевести</div>
+            </div>
+            <div class="action-btn" onclick="openModal('paymentModal')">
+                <div class="action-icon">💳</div>
+                <div class="action-text">Оплатить</div>
+            </div>
+            <div class="action-btn" onclick="openHistory()">
+                <div class="action-icon">📊</div>
+                <div class="action-text">История</div>
+            </div>
+        </div>
 
-            <h3>История операций:</h3>
-            <ul id="history"></ul>
+        <!-- История операций -->
+        <div class="history-section">
+            <div class="section-title">Последние операции</div>
+            <div id="historyList">
+                <!-- История будет здесь -->
+            </div>
+        </div>
+
+        <!-- Нижнее меню -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div>Главная</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💳</div>
+                <div>Платежи</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📱</div>
+                <div>Сервисы</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🏪</div>
+                <div>Магазин</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">⋮</div>
+                <div>Ещё</div>
+            </div>
+        </div>
+
+        <!-- Модальное окно пополнения -->
+        <div id="depositModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Пополнение счета</h3>
+                    <button class="close-btn" onclick="closeModal('depositModal')">×</button>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Сумма пополнения</label>
+                    <input type="number" id="depositAmount" class="input-field" placeholder="0 ₽">
+                </div>
+                <button class="submit-btn" onclick="deposit()">Пополнить</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно перевода -->
+        <div id="transferModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Перевод средств</h3>
+                    <button class="close-btn" onclick="closeModal('transferModal')">×</button>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Сумма перевода</label>
+                    <input type="number" id="transferAmount" class="input-field" placeholder="0 ₽">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Номер карты/счета</label>
+                    <input type="text" id="recipient" class="input-field" placeholder="0000 0000 0000 0000">
+                </div>
+                <button class="submit-btn" onclick="transfer()">Перевести</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно оплаты -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Оплата услуг</h3>
+                    <button class="close-btn" onclick="closeModal('paymentModal')">×</button>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Сумма оплаты</label>
+                    <input type="number" id="paymentAmount" class="input-field" placeholder="0 ₽">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Номер счета/лицевой счет</label>
+                    <input type="text" id="accountNumber" class="input-field" placeholder="Введите номер счета">
+                </div>
+                <button class="submit-btn" onclick="makePayment()">Оплатить</button>
+            </div>
         </div>
     </div>
 
     <script>
         // Инициализация данных
         if(!localStorage.getItem('balance')) {
-            localStorage.setItem('balance', '0');
-            localStorage.setItem('history', JSON.stringify([]));
+            localStorage.setItem('balance', '15000');
+            localStorage.setItem('history', JSON.stringify([
+                'Пополнение: +5000 ₽',
+                'Перевод Ивану: -1500 ₽', 
+                'Оплата ЖКХ: -2500 ₽',
+                'Кэшбек: +300 ₽',
+                'Перевод от Марии: +2000 ₽'
+            ]));
         }
 
         function updateDisplay() {
             // Обновление баланса
+            const balance = localStorage.getItem('balance');
             document.getElementById('balance').textContent = 
-                localStorage.getItem('balance');
+                parseInt(balance).toLocaleString('ru-RU') + ' ₽';
             
             // Обновление истории
             const history = JSON.parse(localStorage.getItem('history'));
-            document.getElementById('history').innerHTML = history
-                .map(record => `<li>${record}</li>`)
-                .reverse()
-                .join('');
+            const historyList = document.getElementById('historyList');
+            
+            historyList.innerHTML = history.slice(-5).reverse().map(record => {
+                const isPositive = record.includes('+');
+                const amountClass = isPositive ? '' : 'negative';
+                
+                return `
+                    <div class="transaction">
+                        <div class="transaction-icon">
+                            ${isPositive ? '⬇️' : '⬆️'}
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">${record.split(':')[0]}</div>
+                            <div class="transaction-date">Сегодня</div>
+                        </div>
+                        <div class="transaction-amount ${amountClass}">
+                            ${record.split(':')[1]}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
         }
 
         function deposit() {
-            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const amount = parseInt(document.getElementById('depositAmount').value);
             if(amount <= 0) return alert('Введите корректную сумму');
             
-            const currentBalance = parseFloat(localStorage.getItem('balance'));
+            const currentBalance = parseInt(localStorage.getItem('balance'));
             const newBalance = currentBalance + amount;
             
             localStorage.setItem('balance', newBalance.toString());
             
             const history = JSON.parse(localStorage.getItem('history'));
-            history.push(`Пополнение: +${amount} руб.`);
+            history.push(`Пополнение: +${amount} ₽`);
             localStorage.setItem('history', JSON.stringify(history));
             
             updateDisplay();
+            closeModal('depositModal');
             document.getElementById('depositAmount').value = '';
         }
 
         function transfer() {
-            const amount = parseFloat(document.getElementById('transferAmount').value);
+            const amount = parseInt(document.getElementById('transferAmount').value);
             const recipient = document.getElementById('recipient').value;
-            const currentBalance = parseFloat(localStorage.getItem('balance'));
+            const currentBalance = parseInt(localStorage.getItem('balance'));
             
             if(amount <= 0) return alert('Введите корректную сумму');
-            if(!recipient) return alert('Введите получателя');
+            if(!recipient) return alert('Введите номер карты/счета');
             if(amount > currentBalance) return alert('Недостаточно средств');
             
             const newBalance = currentBalance - amount;
             localStorage.setItem('balance', newBalance.toString());
             
             const history = JSON.parse(localStorage.getItem('history'));
-            history.push(`Перевод ${recipient}: -${amount} руб.`);
+            history.push(`Перевод на ${recipient}: -${amount} ₽`);
             localStorage.setItem('history', JSON.stringify(history));
             
             updateDisplay();
+            closeModal('transferModal');
             document.getElementById('transferAmount').value = '';
             document.getElementById('recipient').value = '';
+        }
+
+        function makePayment() {
+            const amount = parseInt(document.getElementById('paymentAmount').value);
+            const account = document.getElementById('accountNumber').value;
+            const currentBalance = parseInt(localStorage.getItem('balance'));
+            
+            if(amount <= 0) return alert('Введите корректную сумму');
+            if(!account) return alert('Введите номер счета');
+            if(amount > currentBalance) return alert('Недостаточно средств');
+            
+            const newBalance = currentBalance - amount;
+            localStorage.setItem('balance', newBalance.toString());
+            
+            const history = JSON.parse(localStorage.getItem('history'));
+            history.push(`Оплата по счету ${account}: -${amount} ₽`);
+            localStorage.setItem('history', JSON.stringify(history));
+            
+            updateDisplay();
+            closeModal('paymentModal');
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('accountNumber').value = '';
+        }
+
+        function openHistory() {
+            const history = JSON.parse(localStorage.getItem('history'));
+            alert('Полная история:\n' + history.reverse().join('\n'));
+        }
+
+        // Закрытие модальных окон при клике вне их
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
         }
 
         // Первоначальное обновление интерфейса
         updateDisplay();
     </script>
 </body>
-</html>
+                    </html>
