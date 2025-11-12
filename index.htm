@@ -27,16 +27,6 @@
             background: #f5f5f5;
             min-height: 100vh;
             position: relative;
-            padding-bottom: 60px;
-        }
-
-        /* Страницы */
-        .page {
-            display: none;
-        }
-
-        .page.active {
-            display: block;
         }
 
         /* Верхняя часть приложения */
@@ -107,7 +97,6 @@
         .action-btn {
             text-align: center;
             padding: 10px 5px;
-            cursor: pointer;
         }
 
         .action-icon {
@@ -187,105 +176,6 @@
             color: #ff4444;
         }
 
-        /* Стили для других страниц */
-        .services-grid, .payments-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 15px;
-            padding: 20px;
-        }
-
-        .service-card {
-            background: white;
-            padding: 20px 10px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            cursor: pointer;
-        }
-
-        .service-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .service-name {
-            font-size: 12px;
-            color: #333;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            padding: 20px;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 120px;
-            background: #e8f5e8;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-        }
-
-        .product-info {
-            padding: 15px;
-        }
-
-        .product-name {
-            font-weight: 500;
-            margin-bottom: 8px;
-        }
-
-        .product-price {
-            color: #21a038;
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 10px;
-        }
-
-        .buy-btn {
-            width: 100%;
-            padding: 10px;
-            background: #21a038;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .settings-list {
-            background: white;
-            margin: 20px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .settings-item {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .settings-item:last-child {
-            border-bottom: none;
-        }
-
         /* Нижнее меню */
         .bottom-nav {
             position: fixed;
@@ -304,7 +194,6 @@
             padding: 8px;
             color: #999;
             font-size: 10px;
-            cursor: pointer;
         }
 
         .nav-item.active {
@@ -351,7 +240,6 @@
             border: none;
             font-size: 24px;
             color: #666;
-            cursor: pointer;
         }
 
         .input-group {
@@ -365,22 +253,12 @@
             font-size: 14px;
         }
 
-        .input-field, .textarea-field {
+        .input-field {
             width: 100%;
             padding: 15px;
             border: 1px solid #ddd;
             border-radius: 12px;
             font-size: 16px;
-        }
-
-        .input-field:invalid {
-            border-color: #ff4444;
-            background-color: #fff5f5;
-        }
-
-        .textarea-field {
-            height: 80px;
-            resize: none;
         }
 
         .submit-btn {
@@ -393,12 +271,6 @@
             font-size: 16px;
             font-weight: 600;
             margin-top: 10px;
-            cursor: pointer;
-        }
-
-        .submit-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
         }
 
         /* Стили для изображения в переводе */
@@ -429,225 +301,282 @@
             background: #f8f9fa;
             border-radius: 8px;
         }
-
-        .comment-notice {
-            font-size: 12px;
-            color: #666;
-            margin-top: 5px;
-            text-align: center;
-        }
-
-        .validation-error {
-            color: #ff4444;
-            font-size: 12px;
-            margin-top: 5px;
-            display: none;
-        }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- Главная страница -->
-        <div id="homePage" class="page active">
-            <!-- Верхняя часть приложения -->
-            <div class="app-header">
-                <div class="header-top">
-                    <div class="app-title">СберБанк</div>
-                    <div class="avatar">L</div>
-                </div>
-                <div class="balance-card">
-                    <div class="balance-label">Ваш баланс</div>
-                    <div class="balance-amount" id="balance">0 ₽</div>
-                    <div class="balance-label">Кэшбек: 0 ₽</div>
-                </div>
+        <!-- Верхняя часть приложения -->
+        <div class="app-header">
+            <div class="header-top">
+                <div class="app-title">СберБанк</div>
+                <div class="avatar">L</div>
             </div>
-
-            <!-- Быстрые действия -->
-            <div class="quick-actions">
-                <div class="action-btn" onclick="openModal('depositModal')">
-                    <div class="action-icon">+</div>
-                    <div class="action-text">Пополнить</div>
-                </div>
-                <div class="action-btn" onclick="openModal('transferModal')">
-                    <div class="action-icon">⇄</div>
-                    <div class="action-text">Перевести</div>
-                </div>
-                <div class="action-btn" onclick="switchPage('paymentsPage')">
-                    <div class="action-icon">💳</div>
-                    <div class="action-text">Оплатить</div>
-                </div>
-                <div class="action-btn" onclick="openHistory()">
-                    <div class="action-icon">📊</div>
-                    <div class="action-text">История</div>
-                </div>
-            </div>
-
-            <!-- История операций -->
-            <div class="history-section">
-                <div class="section-title">Последние операции</div>
-                <div id="historyList">
-                    <!-- История будет здесь -->
-                </div>
+            <div class="balance-card">
+                <div class="balance-label">Ваш баланс</div>
+                <div class="balance-amount" id="balance">0 ₽</div>
+                <div class="balance-label">Кэшбек: 0 ₽</div>
             </div>
         </div>
 
-        <!-- Платежи -->
-        <div id="paymentsPage" class="page">
-            <div class="app-header">
-                <div class="header-top">
-                    <div class="app-title">Платежи</div>
-                    <div class="avatar">L</div>
-                </div>
+        <!-- Быстрые действия -->
+        <div class="quick-actions">
+            <div class="action-btn" onclick="openModal('depositModal')">
+                <div class="action-icon">+</div>
+                <div class="action-text">Пополнить</div>
             </div>
-            <div class="payments-grid">
-                <div class="service-card" onclick="openModal('mobileModal')">
-                    <div class="service-icon">📱</div>
-                    <div class="service-name">Мобильная связь</div>
-                </div>
-                <div class="service-card" onclick="openModal('internetModal')">
-                    <div class="service-icon">🌐</div>
-                    <div class="service-name">Интернет</div>
-                </div>
-                <div class="service-card" onclick="openModal('housingModal')">
-                    <div class="service-icon">🏠</div>
-                    <div class="service-name">ЖКХ</div>
-                </div>
-                <div class="service-card" onclick="openModal('taxModal')">
-                    <div class="service-icon">🏛️</div>
-                    <div class="service-name">Налоги</div>
-                </div>
-                <div class="service-card" onclick="openModal('transferModal')">
-                    <div class="service-icon">⇄</div>
-                    <div class="service-name">Перевод</div>
-                </div>
-                <div class="service-card" onclick="openModal('otherModal')">
-                    <div class="service-icon">📄</div>
-                    <div class="service-name">Другие</div>
-                </div>
+            <div class="action-btn" onclick="openModal('transferModal')">
+                <div class="action-icon">⇄</div>
+                <div class="action-text">Перевести</div>
+            </div>
+            <div class="action-btn" onclick="openModal('paymentModal')">
+                <div class="action-icon">💳</div>
+                <div class="action-text">Оплатить</div>
+            </div>
+            <div class="action-btn" onclick="openHistory()">
+                <div class="action-icon">📊</div>
+                <div class="action-text">История</div>
             </div>
         </div>
 
-        <!-- Сервисы -->
-        <div id="servicesPage" class="page">
-            <div class="app-header">
-                <div class="header-top">
-                    <div class="app-title">Сервисы</div>
-                    <div class="avatar">L</div>
-                </div>
-            </div>
-            <div class="services-grid">
-                <div class="service-card" onclick="openServiceModal('credit')">
-                    <div class="service-icon">💰</div>
-                    <div class="service-name">Кредиты</div>
-                </div>
-                <div class="service-card" onclick="openServiceModal('deposit')">
-                    <div class="service-icon">🏦</div>
-                    <div class="service-name">Вклады</div>
-                </div>
-                <div class="service-card" onclick="openServiceModal('investment')">
-                    <div class="service-icon">📈</div>
-                    <div class="service-name">Инвестиции</div>
-                </div>
-                <div class="service-card" onclick="openServiceModal('insurance')">
-                    <div class="service-icon">🛡️</div>
-                    <div class="service-name">Страхование</div>
-                </div>
-                <div class="service-card" onclick="openServiceModal('mortgage')">
-                    <div class="service-icon">🏡</div>
-                    <div class="service-name">Ипотека</div>
-                </div>
-                <div class="service-card" onclick="openServiceModal('cards')">
-                    <div class="service-icon">💳</div>
-                    <div class="service-name">Карты</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Магазин -->
-        <div id="shopPage" class="page">
-            <div class="app-header">
-                <div class="header-top">
-                    <div class="app-title">Магазин</div>
-                    <div class="avatar">L</div>
-                </div>
-            </div>
-            <div class="products-grid">
-                <div class="product-card">
-                    <div class="product-image">🎧</div>
-                    <div class="product-info">
-                        <div class="product-name">Наушники</div>
-                        <div class="product-price">2 499 ₽</div>
-                        <button class="buy-btn" onclick="buyProduct('Наушники', 2499)">Купить</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">⌚</div>
-                    <div class="product-info">
-                        <div class="product-name">Умные часы</div>
-                        <div class="product-price">5 999 ₽</div>
-                        <button class="buy-btn" onclick="buyProduct('Умные часы', 5999)">Купить</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">📚</div>
-                    <div class="product-info">
-                        <div class="product-name">Книги</div>
-                        <div class="product-price">899 ₽</div>
-                        <button class="buy-btn" onclick="buyProduct('Книги', 899)">Купить</button>
-                    </div>
-                </div>
-                <div class="product-card">
-                    <div class="product-image">☕</div>
-                    <div class="product-info">
-                        <div class="product-name">Кофе</div>
-                        <div class="product-price">450 ₽</div>
-                        <button class="buy-btn" onclick="buyProduct('Кофе', 450)">Купить</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ещё -->
-        <div id="morePage" class="page">
-            <div class="app-header">
-                <div class="header-top">
-                    <div class="app-title">Настройки</div>
-                    <div class="avatar">L</div>
-                </div>
-            </div>
-            <div class="settings-list">
-                <div class="settings-item" onclick="openSettings('profile')">
-                    <span>Профиль</span>
-                    <span>➔</span>
-                </div>
-                <div class="settings-item" onclick="openSettings('security')">
-                    <span>Безопасность</span>
-                    <span>➔</span>
-                </div>
-                <div class="settings-item" onclick="openSettings('notifications')">
-                    <span>Уведомления</span>
-                    <span>➔</span>
-                </div>
-                <div class="settings-item" onclick="openSettings('about')">
-                    <span>О приложении</span>
-                    <span>➔</span>
-                </div>
-                <div class="settings-item" onclick="resetData()">
-                    <span style="color: #ff4444;">Сбросить данные</span>
-                    <span>➔</span>
-                </div>
+        <!-- История операций -->
+        <div class="history-section">
+            <div class="section-title">Последние операции</div>
+            <div id="historyList">
+                <!-- История будет здесь -->
             </div>
         </div>
 
         <!-- Нижнее меню -->
         <div class="bottom-nav">
-            <div class="nav-item active" onclick="switchPage('homePage')">
+            <div class="nav-item active">
                 <div class="nav-icon">🏠</div>
                 <div>Главная</div>
             </div>
-            <div class="nav-item" onclick="switchPage('paymentsPage')">
+            <div class="nav-item">
                 <div class="nav-icon">💳</div>
                 <div>Платежи</div>
             </div>
-            <div class="nav-item" onclick="switchPage('servicesPage')">
-                <div class.
+            <div class="nav-item">
+                <div class="nav-icon">📱</div>
+                <div>Сервисы</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🏪</div>
+                <div>Магазин</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">⋮</div>
+                <div>Ещё</div>
+            </div>
+        </div>
+
+        <!-- Модальное окно пополнения -->
+        <div id="depositModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Пополнение счета</h3>
+                    <button class="close-btn" onclick="closeModal('depositModal')">×</button>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Сумма пополнения</label>
+                    <input type="number" id="depositAmount" class="input-field" placeholder="0 ₽">
+                </div>
+                <button class="submit-btn" onclick="deposit()">Пополнить</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно перевода -->
+        <div id="transferModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Перевод средств</h3>
+                    <button class="close-btn" onclick="closeModal('transferModal')">×</button>
+                </div>
+                
+                <!-- Картинка LegitWorld -->
+                <div class="transfer-image">
+                    <!-- SVG с текстом LegitWorld -->
+                </div>
+                <div class="image-notice">
+                    Быстрые переводы через LegitWorld
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Сумма перевода</label>
+                    <input type="number" id="transferAmount" class="input-field" placeholder="0 ₽">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Номер карты/счета</label>
+                    <input type="text" id="recipient" class="input-field" placeholder="0000 0000 0000 0000">
+                </div>
+                <button class="submit-btn" onclick="transfer()">Перевести</button>
+            </div>
+        </div>
+
+        <!-- Модальное окно оплаты -->
+        <div id="paymentModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Оплата услуг</h3>
+                    <button class="close-btn" onclick="closeModal('paymentModal')">×</button>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Сумма оплаты</label>
+                    <input type="number" id="paymentAmount" class="input-field" placeholder="0 ₽">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Номер счета/лицевой счет</label>
+                    <input type="text" id="accountNumber" class="input-field" placeholder="Введите номер счета">
+                </div>
+                <button class="submit-btn" onclick="makePayment()">Оплатить</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация данных
+        if(!localStorage.getItem('balance')) {
+            localStorage.setItem('balance', '2000');
+            localStorage.setItem('history', JSON.stringify([
+                'LegitWorld: +1000 ₽',
+                'Пополнение: +1000 ₽', 
+                'Оплата ЖКХ: -2500 ₽',
+                'LegitWorld: +500 ₽',
+                'Перевод от Марии: +2000 ₽'
+            ]));
+        }
+
+        function updateDisplay() {
+            // Обновление баланса
+            const balance = localStorage.getItem('balance');
+            document.getElementById('balance').textContent = 
+                parseInt(balance).toLocaleString('ru-RU') + ' ₽';
+            
+            // Обновление истории
+            const history = JSON.parse(localStorage.getItem('history'));
+            const historyList = document.getElementById('historyList');
+            
+            historyList.innerHTML = history.slice(-5).reverse().map(record => {
+                const isPositive = record.includes('+');
+                const isLegitWorld = record.includes('LegitWorld');
+                const isDeposit = record.includes('Пополнение');
+                const amountClass = isPositive ? '' : 'negative';
+                
+                let icon = '⇄';
+                if (isLegitWorld) icon = 'L';
+                if (isDeposit) icon = '+';
+                
+                return `
+                    <div class="transaction">
+                        <div class="transaction-icon">
+                            ${icon}
+                        </div>
+                        <div class="transaction-info">
+                            <div class="transaction-title">${record.split(':')[0]}</div>
+                            <div class="transaction-date">Сегодня</div>
+                        </div>
+                        <div class="transaction-amount ${amountClass}">
+                            ${record.split(':')[1]}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function deposit() {
+            const amount = parseInt(document.getElementById('depositAmount').value);
+            if(amount <= 0) return alert('Введите корректную сумму');
+            
+            const currentBalance = parseInt(localStorage.getItem('balance'));
+            const newBalance = currentBalance + amount;
+            
+            localStorage.setItem('balance', newBalance.toString());
+            
+            const history = JSON.parse(localStorage.getItem('history'));
+            history.push(`Пополнение: +${amount} ₽`);
+            localStorage.setItem('history', JSON.stringify(history));
+            
+            updateDisplay();
+            closeModal('depositModal');
+            document.getElementById('depositAmount').value = '';
+            alert(`Счет пополнен на ${amount} ₽`);
+        }
+
+        function transfer() {
+            const amount = parseInt(document.getElementById('transferAmount').value);
+            const recipient = document.getElementById('recipient').value;
+            const currentBalance = parseInt(localStorage.getItem('balance'));
+            
+            if(amount <= 0) return alert('Введите корректную сумму');
+            if(!recipient) return alert('Введите номер карты/счета');
+            if(amount > currentBalance) return alert('Недостаточно средств');
+            
+            const newBalance = currentBalance - amount;
+            localStorage.setItem('balance', newBalance.toString());
+            
+            const history = JSON.parse(localStorage.getItem('history'));
+            history.push(`Перевод на ${recipient}: -${amount} ₽`);
+            localStorage.setItem('history', JSON.stringify(history));
+            
+            updateDisplay();
+            closeModal('transferModal');
+            document.getElementById('transferAmount').value = '';
+            document.getElementById('recipient').value = '';
+            alert(`Перевод ${amount} ₽ через LegitWorld выполнен`);
+        }
+
+        function makePayment() {
+            const amount = parseInt(document.getElementById('paymentAmount').value);
+            const account = document.getElementById('accountNumber').value;
+            const currentBalance = parseInt(localStorage.getItem('balance'));
+            
+            if(amount <= 0) return alert('Введите корректную сумму');
+            if(!account) return alert('Введите номер счета');
+            if(amount > currentBalance) return alert('Недостаточно средств');
+            
+            const newBalance = currentBalance - amount;
+            localStorage.setItem('balance', newBalance.toString());
+            
+            const history = JSON.parse(localStorage.getItem('history'));
+            history.push(`Оплата по счету ${account}: -${amount} ₽`);
+            localStorage.setItem('history', JSON.stringify(history));
+            
+            updateDisplay();
+            closeModal('paymentModal');
+            document.getElementById('paymentAmount').value = '';
+            document.getElementById('accountNumber').value = '';
+        }
+
+        function openHistory() {
+            const history = JSON.parse(localStorage.getItem('history'));
+            alert('Полная история:\n' + history.reverse().join('\n'));
+        }
+
+        // Закрытие модальных окон при клике вне их
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // Блокировка выделения текста
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        // Первоначальное обновление интерфейса
+        updateDisplay();
+    </script>
+</body>
+</html>
